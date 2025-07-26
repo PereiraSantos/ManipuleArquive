@@ -5,24 +5,16 @@ import 'dart:io';
 
 abstract class CommandFactory {
   Future<void> processStart(String command);
-  void buildEmulater();
-  void buildProject();
+  List<String> buildEmulater();
+  List<String> buildProject();
+  List<String> buildDatabase();
+  List<String> buildShared();
   bool isRoot();
-  void buildDatabase();
-  void buildShared();
 }
 
 class Command implements CommandFactory {
   String? stdoutData;
   String? stderrData;
-  List<String> emulators = [];
-  List<String> projects = [];
-  List<String> databases = [];
-  List<String> shareds = [];
-  String emulatorsSelected = 'Selecione o aparelho';
-  String projectSelected = 'Selecione o projeto';
-  String selectDatabase = 'Selecione database';
-  String selectShared = 'Selecione shared';
 
   @override
   Future<void> processStart(String command) async {
@@ -46,16 +38,19 @@ class Command implements CommandFactory {
   }
 
   @override
-  void buildEmulater() {
-    if (stdoutData == null) return;
-    emulators = [];
+  List<String> buildEmulater() {
+    if (stdoutData == null) return [];
+
+    List<String> emulators = [];
 
     String emulator = stdoutData!.replaceAll('List of devices attached', '').trim();
 
     if (emulator != "") {
-      emulators.add(emulatorsSelected);
+      emulators.add('Selecione o emulador');
       emulators.add(emulator);
     }
+
+    return emulators;
   }
 
   @override
@@ -66,44 +61,45 @@ class Command implements CommandFactory {
   }
 
   @override
-  void buildProject() {
-    if (stdoutData == null) return;
-    projects = [];
+  List<String> buildProject() {
+    if (stdoutData == null) return [];
+    List<String> projects = [];
 
-    projects.add(projectSelected);
+    projects.add('Selecione o projeto');
     List<String> list = stdoutData!.split('\n');
 
     projects.addAll(list);
+
+    return projects;
   }
 
   @override
-  void buildDatabase() {
-    if (stdoutData == null) return;
-    databases = [];
+  List<String> buildDatabase() {
+    if (stdoutData == null) return [];
+    List<String> databases = [];
 
-    databases.add(selectDatabase);
+    databases.add('Selecione o banco');
     List<String> list = stdoutData!.split('\n');
 
     databases.addAll(list);
+
+    return databases;
   }
 
   @override
-  void buildShared() {
-    if (stdoutData == null) return;
-    shareds = [];
+  List<String> buildShared() {
+    if (stdoutData == null) return [];
+    List<String> shareds = [];
 
-    shareds.add(selectShared);
+    shareds.add('Selecione o shared');
     List<String> list = stdoutData!.split('\n');
 
     shareds.addAll(list);
+    return shareds;
   }
 
   void reset() {
     stdoutData = null;
     stderrData = null;
-    emulators = [];
-    projects = [];
-    databases = [];
-    shareds = [];
   }
 }

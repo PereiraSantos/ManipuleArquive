@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:manipule_arquive/dashboard/dashboard.dart';
+import 'package:manipule_arquive/dashboard/views/dashboard.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +13,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
       home: const Dashboard(),
