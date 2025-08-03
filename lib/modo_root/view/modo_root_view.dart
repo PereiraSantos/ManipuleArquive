@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:manipule_arquive/emulator/view_model/emulator_view_model.dart';
+
+import 'package:manipule_arquive/usercases/dropdown_view_model.dart';
 import 'package:manipule_arquive/utils/command.dart';
 
 // ignore: must_be_immutable
@@ -12,10 +13,10 @@ class ModoRootView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<EmulatorViewModel, bool>(builder: (context, loading) {
-      bool root = modoRoot && context.read<EmulatorViewModel>().lists.length > 1;
+    return BlocBuilder<DropdownViewModel, bool>(builder: (context, loading) {
+      bool root = modoRoot && context.read<DropdownViewModel>().lists.length > 1;
 
-      if (context.read<EmulatorViewModel>().lists.isEmpty || context.read<EmulatorViewModel>().selected == 'Selecione o emulador') return const SizedBox();
+      if (context.read<DropdownViewModel>().lists.isEmpty || context.read<DropdownViewModel>().selected == 'Selecione o emulador') return const SizedBox();
 
       return Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -33,14 +34,14 @@ class ModoRootView extends StatelessWidget {
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
                   onTap: () async {
-                    if (context.read<EmulatorViewModel>().selected == 'Selecione o emulador') return;
+                    if (context.read<DropdownViewModel>().selected == 'Selecione o emulador') return;
 
-                    context.read<EmulatorViewModel>().chancheLoading(true);
-                    await command.processStart('adb root');
+                    context.read<DropdownViewModel>().chancheLoading(true);
+                    await command.processStart('adb root', Theme.of(context).platform.name);
                     modoRoot = command.isRoot();
 
                     // ignore: use_build_context_synchronously
-                    context.read<EmulatorViewModel>().chancheLoading(false);
+                    context.read<DropdownViewModel>().chancheLoading(false);
                   },
                   child: Container(
                     height: 25,

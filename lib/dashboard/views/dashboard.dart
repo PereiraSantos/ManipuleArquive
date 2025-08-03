@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:manipule_arquive/database/view/database_view.dart';
-import 'package:manipule_arquive/database/view_model/database_view_model.dart';
-import 'package:manipule_arquive/emulator/view_model/emulator_view_model.dart';
 import 'package:manipule_arquive/modo_root/view/modo_root_view.dart';
 import 'package:manipule_arquive/projects/view/project_view.dart';
-import 'package:manipule_arquive/projects/view_model/project_view_model.dart';
 import 'package:manipule_arquive/shared_prefs/view/shared_prefs_view.dart';
-import 'package:manipule_arquive/shared_prefs/view_model/shared_prefs_view_model.dart';
 import 'package:manipule_arquive/transfer/view/transfer_view.dart';
 import 'package:manipule_arquive/transfer/view_model/transfer_view_model.dart';
+import 'package:manipule_arquive/usercases/dropdown_view_model.dart';
 
 import 'package:manipule_arquive/utils/command.dart';
 import 'package:manipule_arquive/widgets/elevated_button_widget.dart';
@@ -32,10 +29,10 @@ class _DashboardState extends State<Dashboard> {
 
   _update() => setState(() {});
 
-  EmulatorViewModel emulatorsViewModel = EmulatorViewModel();
-  ProjectViewModel projectViewModel = ProjectViewModel();
-  DatabaseViewModel databaseViewModel = DatabaseViewModel();
-  SharedPrefsViewModel sharedPrefsViewModel = SharedPrefsViewModel();
+  DropdownViewModel emulatorsViewModel = DropdownViewModel()..selected = 'Selecione o emulador';
+  DropdownViewModel projectViewModel = DropdownViewModel()..selected = 'Selecione o projeto';
+  DropdownViewModel databaseViewModel = DropdownViewModel()..selected = 'Selecione o banco';
+  DropdownViewModel sharedPrefsViewModel = DropdownViewModel()..selected = 'Selecione o shared';
   TransferViewModel transferViewModel = TransferViewModel();
 
   @override
@@ -58,7 +55,7 @@ class _DashboardState extends State<Dashboard> {
                 children: [
                   BlocProvider(
                     create: (_) => emulatorsViewModel,
-                    child: EmulatorView(),
+                    child: const EmulatorView(),
                   ),
                   BlocProvider(
                     create: (_) => emulatorsViewModel,
@@ -66,16 +63,11 @@ class _DashboardState extends State<Dashboard> {
                   ),
                   BlocProvider(
                     create: (_) => projectViewModel,
-                    child: ProjectView(),
+                    child: const ProjectView(),
                   ),
                   BlocProvider(
                     create: (_) => transferViewModel,
-                    child: TransferView(
-                      project: projectViewModel.selected,
-                      database: databaseViewModel.selected,
-                      shared: sharedPrefsViewModel.selected,
-                      path: controller.text,
-                    ),
+                    child: TransferView(path: controller.text),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -94,11 +86,11 @@ class _DashboardState extends State<Dashboard> {
                 children: [
                   BlocProvider(
                     create: (_) => databaseViewModel,
-                    child: DatabaseView(projectViewModel: projectViewModel),
+                    child: const DatabaseView(),
                   ),
                   BlocProvider(
                     create: (_) => sharedPrefsViewModel,
-                    child: SharedPrefsView(projectViewModel: projectViewModel),
+                    child: const SharedPrefsView(),
                   ),
                 ],
               ),
@@ -127,7 +119,7 @@ class _DashboardState extends State<Dashboard> {
             messageActionFinishSucces = null;
             messageActionFinishErro = null;
 
-            await Command().processStart(transferViewModel.commandTransfer);
+            await Command().processStart(transferViewModel.commandTransfer, Theme.of(context).platform.name);
             _update();
           },
           label: 'Concluir',

@@ -9,13 +9,11 @@ import 'package:manipule_arquive/transfer/view_model/local.dart';
 import 'package:manipule_arquive/transfer/view_model/shared.dart';
 import 'package:manipule_arquive/transfer/view_model/transfer_view_model.dart';
 import 'package:manipule_arquive/transfer/widgets/list_title.dart';
+import 'package:manipule_arquive/usercases/button_drop_down_cache.dart';
 
 class TransferView extends StatelessWidget {
-  const TransferView({super.key, required this.project, required this.database, required this.shared, required this.path});
+  const TransferView({super.key, required this.path});
 
-  final String project;
-  final String database;
-  final String shared;
   final String path;
 
   @override
@@ -35,7 +33,7 @@ class TransferView extends StatelessWidget {
           ),
           ListTitle(
             onChanged: (value) {
-              context.read<TransferViewModel>().selected(value!, Database(path, project));
+              context.read<TransferViewModel>().selected(value!, Database(path, ButtonDropDownCache().project ?? ''));
             },
             groupValue: action,
             label: 'Enviar para database',
@@ -43,7 +41,7 @@ class TransferView extends StatelessWidget {
           ),
           ListTitle(
             onChanged: (value) {
-              context.read<TransferViewModel>().selected(value!, Shared(path, project));
+              context.read<TransferViewModel>().selected(value!, Shared(path, ButtonDropDownCache().project ?? ''));
             },
             groupValue: action,
             label: 'Enviar para shared preference',
@@ -51,7 +49,9 @@ class TransferView extends StatelessWidget {
           ),
           ListTitle(
             onChanged: (value) {
-              context.read<TransferViewModel>().selected(value!, Local(database, shared, project, path));
+              context
+                  .read<TransferViewModel>()
+                  .selected(value!, Local(ButtonDropDownCache().database, ButtonDropDownCache().shared, ButtonDropDownCache().project ?? '', path));
             },
             groupValue: action,
             label: 'Salvar na pasta local',
