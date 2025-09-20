@@ -21,8 +21,6 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  String folder = 'arquivo';
-  TextEditingController controller = TextEditingController();
   bool messageAction = false;
   String? messageActionFinishSucces;
   String? messageActionFinishErro;
@@ -44,56 +42,54 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  BlocProvider(
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: BlocProvider(
                     create: (_) => emulatorsViewModel,
                     child: const EmulatorView(),
                   ),
-                  BlocProvider(
+                ),
+                Expanded(
+                  flex: 2,
+                  child: BlocProvider(
                     create: (_) => emulatorsViewModel,
                     child: ModoRootView(),
                   ),
-                  BlocProvider(
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: BlocProvider(
                     create: (_) => projectViewModel,
                     child: const ProjectView(),
                   ),
-                  BlocProvider(
-                    create: (_) => transferViewModel,
-                    child: TransferView(path: controller.text),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      controller: controller,
-                      decoration: InputDecoration(labelText: 'Selecionar $folder'),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  BlocProvider(
+                ),
+                Expanded(
+                  child: BlocProvider(
                     create: (_) => databaseViewModel,
                     child: const DatabaseView(),
                   ),
-                  BlocProvider(
+                ),
+                Expanded(
+                  child: BlocProvider(
                     create: (_) => sharedPrefsViewModel,
                     child: const SharedPrefsView(),
                   ),
-                ],
-              ),
+                ),
+              ],
+            ),
+            BlocProvider(
+              create: (_) => transferViewModel,
+              child: TransferView(),
             ),
           ],
         ),
@@ -108,7 +104,6 @@ class _DashboardState extends State<Dashboard> {
         ),
         ElevatedButtonWidget(
           onPressed: () {
-            controller.clear();
             _update();
           },
           label: 'Resetar',

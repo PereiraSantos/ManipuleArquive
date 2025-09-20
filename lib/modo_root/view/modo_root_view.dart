@@ -22,10 +22,6 @@ class ModoRootView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 05, top: 10),
-            child: Text('Modo root:'),
-          ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -46,7 +42,7 @@ class ModoRootView extends StatelessWidget {
                   child: Container(
                     height: 25,
                     padding: const EdgeInsets.only(left: 10),
-                    child: const Icon(Icons.refresh_rounded),
+                    child: const Text('Ir para modo root'),
                   ),
                 ),
               ),
@@ -56,7 +52,7 @@ class ModoRootView extends StatelessWidget {
                   child: Row(
                     children: [
                       Icon(Icons.check, color: root ? Colors.green : Colors.grey),
-                      Text(root ? 'Em modo root' : 'Em modo padrão', style: TextStyle(color: root ? Colors.green : Colors.grey)),
+                      Text(root ? 'Tipo de permisão root' : 'Tipo de permisão padrão', style: TextStyle(color: root ? Colors.green : Colors.grey)),
                     ],
                   ),
                 ),

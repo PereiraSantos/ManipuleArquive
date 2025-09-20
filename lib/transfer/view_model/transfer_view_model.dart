@@ -7,8 +7,8 @@ class TransferViewModel extends Cubit<ActionEnum> {
 
   String commandTransfer = '';
 
-  void selected(ActionEnum value, CommandTransferFactory commandTransferFactory) {
-    emit(value);
+  void selected(ActionEnum? value, CommandTransferFactory commandTransferFactory) {
+    if (value != null) emit(value);
     commandTransfer = commandTransferFactory.createCommand();
   }
 }
